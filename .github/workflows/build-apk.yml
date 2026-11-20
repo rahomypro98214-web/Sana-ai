@@ -1,6 +1,6 @@
 name: Build Sana AI APK
 
-on:
+'on':
   workflow_dispatch:
   push:
     paths:
@@ -30,9 +30,10 @@ jobs:
 
       - name: Extract Android project
         shell: bash
-        run: | set -euo pipefail test -f SanaAI-Android-Cloud-Build.zip mkdir -p /tmp/sana-project unzip -q SanaAI-Android-Cloud-Build.zip -d /tmp/sana-project test -f /tmp/sana-project/SanaAI-Android/settings.gradle cp -a /tmp/sana-project/SanaAI-Android/. . 
+        run: unzip -q SanaAI-Android-Cloud-Build.zip -d /tmp/sana-project && cp -a /tmp/sana-project/SanaAI-Android/. .
+
       - name: Build debug APK
-        run: gradle --no-daemon --stacktrace assembleDebug
+        run: gradle --no-daemon assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
