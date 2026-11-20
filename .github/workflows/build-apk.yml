@@ -32,6 +32,9 @@ jobs:
         shell: bash
         run: unzip -q SanaAI-Android-Cloud-Build.zip -d /tmp/sana-project && cp -a /tmp/sana-project/SanaAI-Android/. .
 
+      - name: Align Java and Kotlin JVM targets
+        shell: bash
+        run: | python3 - <<'PY' from pathlib import Path p = Path('app/build.gradle') s = p.read_text() if 'sourceCompatibility JavaVersion.VERSION_17' not in s: s = s.rsplit('\n}', 1)[0] + """ compileOptions { sourceCompatibility JavaVersion.VERSION_17 targetCompatibility JavaVersion.VERSION_17 } kotlinOptions { jvmTarget = '17' } } """ p.write_text(s) print(p.read_text()) PY 
       - name: Build debug APK
         run: gradle --no-daemon assembleDebug
 
