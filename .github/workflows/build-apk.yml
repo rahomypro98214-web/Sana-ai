@@ -23,15 +23,16 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Gradle
+      - name: Set up Gradle 8.9
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
       - name: Extract Android project
-        run: | test -f SanaAI-Android-Cloud-Build.zip mkdir -p /tmp/sana-project unzip -q SanaAI-Android-Cloud-Build.zip -d /tmp/sana-project test -f /tmp/sana-project/SanaAI-Android/settings.gradle cp -a /tmp/sana-project/SanaAI-Android/. . 
+        shell: bash
+        run: | set -euo pipefail test -f SanaAI-Android-Cloud-Build.zip mkdir -p /tmp/sana-project unzip -q SanaAI-Android-Cloud-Build.zip -d /tmp/sana-project test -f /tmp/sana-project/SanaAI-Android/settings.gradle cp -a /tmp/sana-project/SanaAI-Android/. . 
       - name: Build debug APK
-        run: gradle --no-daemon assembleDebug
+        run: gradle --no-daemon --stacktrace assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
